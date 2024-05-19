@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css"><link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <style>
+        #map {
+            width: 1081px;
+            height: 493px;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script><script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/Dissolved_1.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[-4.908269195426766,102.37474647566908],[-2.16032026540475,108.4135181569191]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_OpenStreetMap_0');
+        map.getPane('pane_OpenStreetMap_0').style.zIndex = 400;
+        var layer_OpenStreetMap_0 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            pane: 'pane_OpenStreetMap_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_OpenStreetMap_0;
+        map.addLayer(layer_OpenStreetMap_0);
+        function pop_Dissolved_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">KECAMATAN</th>\
+                        <td>' + (feature.properties['KECAMATAN'] !== null ? autolinker.link(feature.properties['KECAMATAN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">KEPADATAN</th>\
+                        <td>' + (feature.properties['KEPADATAN'] !== null ? autolinker.link(feature.properties['KEPADATAN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Jumlah Penduduk Menurut Kecamatan dan Jenis Kelamin (Hasil SP2020)-Sheet1_Field2</th>\
+                        <td>' + (feature.properties['Jumlah Penduduk Menurut Kecamatan dan Jenis Kelamin (Hasil SP2020)-Sheet1_Field2'] !== null ? autolinker.link(feature.properties['Jumlah Penduduk Menurut Kecamatan dan Jenis Kelamin (Hasil SP2020)-Sheet1_Field2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Luas Wilayah-Sheet1_Field2</th>\
+                        <td>' + (feature.properties['Luas Wilayah-Sheet1_Field2'] !== null ? autolinker.link(feature.properties['Luas Wilayah-Sheet1_Field2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Dissolved_1_0(feature) {
+            if (feature.properties['KEPADATAN'] >= 0.110000 && feature.properties['KEPADATAN'] <= 0.214000 ) {
+                return {
+                pane: 'pane_Dissolved_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['KEPADATAN'] >= 0.214000 && feature.properties['KEPADATAN'] <= 0.638000 ) {
+                return {
+                pane: 'pane_Dissolved_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,191,191,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['KEPADATAN'] >= 0.638000 && feature.properties['KEPADATAN'] <= 1.200000 ) {
+                return {
+                pane: 'pane_Dissolved_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,128,128,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['KEPADATAN'] >= 1.200000 && feature.properties['KEPADATAN'] <= 1.680000 ) {
+                return {
+                pane: 'pane_Dissolved_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,64,64,1.0)',
+                interactive: true,
+            }
+            }
+            if (feature.properties['KEPADATAN'] >= 1.680000 && feature.properties['KEPADATAN'] <= 4.140000 ) {
+                return {
+                pane: 'pane_Dissolved_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,0,0,1.0)',
+                interactive: true,
+            }
+            }
+        }
+        map.createPane('pane_Dissolved_1');
+        map.getPane('pane_Dissolved_1').style.zIndex = 401;
+        map.getPane('pane_Dissolved_1').style['mix-blend-mode'] = 'normal';
+        var layer_Dissolved_1 = new L.geoJson(json_Dissolved_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Dissolved_1',
+            layerName: 'layer_Dissolved_1',
+            pane: 'pane_Dissolved_1',
+            onEachFeature: pop_Dissolved_1,
+            style: style_Dissolved_1_0,
+        });
+        bounds_group.addLayer(layer_Dissolved_1);
+        map.addLayer(layer_Dissolved_1);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'Dissolved<br /><table><tr><td style="text-align: center;"><img src="legend/Dissolved_1_0110210.png" /></td><td>0,11 - 0,21</td></tr><tr><td style="text-align: center;"><img src="legend/Dissolved_1_0210641.png" /></td><td>0,21 - 0,64</td></tr><tr><td style="text-align: center;"><img src="legend/Dissolved_1_064122.png" /></td><td>0,64 - 1,2</td></tr><tr><td style="text-align: center;"><img src="legend/Dissolved_1_121683.png" /></td><td>1,2 - 1,68</td></tr><tr><td style="text-align: center;"><img src="legend/Dissolved_1_1684144.png" /></td><td>1,68 - 4,14</td></tr></table>': layer_Dissolved_1,"OpenStreetMap": layer_OpenStreetMap_0,},{collapsed:false}).addTo(map);
+        setBounds();
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Luas Wilayah-Sheet1_Field2": "int","Jumlah Penduduk Menurut Kecamatan dan Jenis Kelamin (Hasil SP2020)-Sheet1_Field2": "int","KECAMATAN": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_LuasWilayahSheet1_Field2 = document.createElement("div");
+            div_LuasWilayahSheet1_Field2.id = "div_LuasWilayahSheet1_Field2";
+            div_LuasWilayahSheet1_Field2.className = "slider";
+            document.getElementById("menu").appendChild(div_LuasWilayahSheet1_Field2);
+            var lab_LuasWilayahSheet1_Field2 = document.createElement('div');
+            lab_LuasWilayahSheet1_Field2.innerHTML  = 'Luas Wilayah-Sheet1_Field2: <span id="val_LuasWilayahSheet1_Field2"></span>';
+            lab_LuasWilayahSheet1_Field2.className = 'filterlabel';
+            document.getElementById("menu").appendChild(lab_LuasWilayahSheet1_Field2);
+            var reset_LuasWilayahSheet1_Field2 = document.createElement('div');
+            reset_LuasWilayahSheet1_Field2.innerHTML = 'clear filter';
+            reset_LuasWilayahSheet1_Field2.className = 'filterlabel';
+            lab_LuasWilayahSheet1_Field2.className = 'filterlabel';
+            reset_LuasWilayahSheet1_Field2.onclick = function() {
+                sel_LuasWilayahSheet1_Field2.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_LuasWilayahSheet1_Field2);
+            var sel_LuasWilayahSheet1_Field2 = document.getElementById('div_LuasWilayahSheet1_Field2');
+            noUiSlider.create(sel_LuasWilayahSheet1_Field2, {
+                connect: true,
+                start: [11022, 448075],
+                step: 1,
+                format: wNumb({
+                    decimals: 0,
+                    }),
+                range: {
+                min: 11022,
+                max: 448075
+                }
+            });
+            sel_LuasWilayahSheet1_Field2.noUiSlider.on('update', function (values) {
+            filterVals =[];
+            for (value in values){
+            filterVals.push(parseInt(value))
+            }
+            val_LuasWilayahSheet1_Field2 = document.getElementById('val_LuasWilayahSheet1_Field2');
+            val_LuasWilayahSheet1_Field2.innerHTML = values.join(' - ');
+                filterFunc()
+            });
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2 = document.createElement("div");
+            div_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2.id = "div_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2";
+            div_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2.className = "slider";
+            document.getElementById("menu").appendChild(div_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2);
+            var lab_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2 = document.createElement('div');
+            lab_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2.innerHTML  = 'Jumlah Penduduk Menurut Kecamatan dan Jenis Kelamin (Hasil SP2020)-Sheet1_Field2: <span id="val_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2"></span>';
+            lab_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2.className = 'filterlabel';
+            document.getElementById("menu").appendChild(lab_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2);
+            var reset_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2 = document.createElement('div');
+            reset_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2.innerHTML = 'clear filter';
+            reset_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2.className = 'filterlabel';
+            lab_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2.className = 'filterlabel';
+            reset_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2.onclick = function() {
+                sel_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2.noUiSlider.reset();
+            };
+            document.getElementById("menu").appendChild(reset_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2);
+            var sel_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2 = document.getElementById('div_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2');
+            noUiSlider.create(sel_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2, {
+                connect: true,
+                start: [22057, 77970],
+                step: 1,
+                format: wNumb({
+                    decimals: 0,
+                    }),
+                range: {
+                min: 22057,
+                max: 77970
+                }
+            });
+            sel_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2.noUiSlider.on('update', function (values) {
+            filterVals =[];
+            for (value in values){
+            filterVals.push(parseInt(value))
+            }
+            val_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2 = document.getElementById('val_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2');
+            val_JumlahPendudukMenurutKecamatandanJenisKelaminHasilSP2020Sheet1_Field2.innerHTML = values.join(' - ');
+                filterFunc()
+            });
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_KECAMATAN = document.createElement('div');
+            div_KECAMATAN.id = "div_KECAMATAN";
+            div_KECAMATAN.className= "filterselect";
+            document.getElementById("menu").appendChild(div_KECAMATAN);
+            sel_KECAMATAN = document.createElement('select');
+            sel_KECAMATAN.multiple = true;
+            sel_KECAMATAN.size = 10;
+            sel_KECAMATAN.id = "sel_KECAMATAN";
+            var KECAMATAN_options_str = "<option value='' unselected></option>";
+            sel_KECAMATAN.onchange = function(){filterFunc()};
+            KECAMATAN_options_str  += '<option value="Air Sugihan">Air Sugihan</option>';
+            KECAMATAN_options_str  += '<option value="Cengal">Cengal</option>';
+            KECAMATAN_options_str  += '<option value="Jejawi">Jejawi</option>';
+            KECAMATAN_options_str  += '<option value="Kota Kayu Agung">Kota Kayu Agung</option>';
+            KECAMATAN_options_str  += '<option value="Lempuing">Lempuing</option>';
+            KECAMATAN_options_str  += '<option value="Lempuing Jaya">Lempuing Jaya</option>';
+            KECAMATAN_options_str  += '<option value="Mesuji">Mesuji</option>';
+            KECAMATAN_options_str  += '<option value="Mesuji Makmur">Mesuji Makmur</option>';
+            KECAMATAN_options_str  += '<option value="Mesuji Raya">Mesuji Raya</option>';
+            KECAMATAN_options_str  += '<option value="Pampangan">Pampangan</option>';
+            KECAMATAN_options_str  += '<option value="Pangkalan Lapam">Pangkalan Lapam</option>';
+            KECAMATAN_options_str  += '<option value="Pedamaran">Pedamaran</option>';
+            KECAMATAN_options_str  += '<option value="Pedamaran Timur">Pedamaran Timur</option>';
+            KECAMATAN_options_str  += '<option value="Sirah Pulau Padang">Sirah Pulau Padang</option>';
+            KECAMATAN_options_str  += '<option value="Sungai Menang">Sungai Menang</option>';
+            KECAMATAN_options_str  += '<option value="Tanjung Lubuk">Tanjung Lubuk</option>';
+            KECAMATAN_options_str  += '<option value="Teluk Gelam">Teluk Gelam</option>';
+            KECAMATAN_options_str  += '<option value="Tulung Selapan">Tulung Selapan</option>';
+            sel_KECAMATAN.innerHTML = KECAMATAN_options_str;
+            div_KECAMATAN.appendChild(sel_KECAMATAN);
+            var lab_KECAMATAN = document.createElement('div');
+            lab_KECAMATAN.innerHTML = 'KECAMATAN';
+            lab_KECAMATAN.className = 'filterlabel';
+            div_KECAMATAN.appendChild(lab_KECAMATAN);
+            var reset_KECAMATAN = document.createElement('div');
+            reset_KECAMATAN.innerHTML = 'clear filter';
+            reset_KECAMATAN.className = 'filterlabel';
+            reset_KECAMATAN.onclick = function() {
+                var options = document.getElementById("sel_KECAMATAN").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_KECAMATAN.appendChild(reset_KECAMATAN);
+        </script>
+    </body>
+</html>
